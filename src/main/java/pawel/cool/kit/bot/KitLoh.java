@@ -1,5 +1,6 @@
 package pawel.cool.kit.bot;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -21,6 +22,8 @@ public class KitLoh extends TelegramLongPollingBot {
     private String botToken;
     @Value("${bot.kit.answer1}")
     private String answer1;
+    @Autowired
+    private Resolver resolver;
 
     @Override
     public String getBotToken() {
@@ -31,16 +34,18 @@ public class KitLoh extends TelegramLongPollingBot {
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
             Message message = update.getMessage();
-            SendMessage replyMessage = new SendMessage();
-            replyMessage.enableMarkdown(true);
-            replyMessage.setText(answer1);
-            replyMessage.setChatId(message.getChatId());
-            try {
-                execute(replyMessage);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
+            String userName = message.getFrom().getUserName();
+            String answer = resolver.answerForUser(userName);
+            sendMessage(message.getChatId(), answer);
         } else throw new IllegalStateException("Empty Message");
+    }
+
+    private synchronized void sendMessage(Long chatId, String message) {
+        try {
+            execute(new SendMessage(chatId, message));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
