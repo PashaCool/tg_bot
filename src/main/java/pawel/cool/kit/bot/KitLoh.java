@@ -9,7 +9,9 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import pawel.cool.kit.resolver.AuthorResolver;
 
 @Component
 @EnableConfigurationProperties
@@ -20,10 +22,8 @@ public class KitLoh extends TelegramLongPollingBot {
     private String botUserName;
     @Value("${bot.kit.botToken}")
     private String botToken;
-    @Value("${bot.kit.answer1}")
-    private String answer1;
     @Autowired
-    private Resolver resolver;
+    private AuthorResolver resolver;
 
     @Override
     public String getBotToken() {
@@ -33,10 +33,8 @@ public class KitLoh extends TelegramLongPollingBot {
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
-            Message message = update.getMessage();
-            String userName = message.getFrom().getUserName();
-            String answer = resolver.answerForUser(userName);
-            sendMessage(message.getChatId(), answer);
+            String answer = resolver.getRandomAnswer();
+            sendMessage(update.getMessage().getChatId(), answer);
         } else throw new IllegalStateException("Empty Message");
     }
 

@@ -1,14 +1,24 @@
-package pawel.cool.kit.bot;
+package pawel.cool.kit.resolver;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.objects.User;
+import pawel.cool.kit.service.AnswerService;
 
 @Component
-public class Resolver {
+public class AuthorResolver {
 
     private static final String PAWEL = "PawelI";
     private static final String BARADAUKIN = "baradaukin";
     private static final String MEKL_CHERNYI = "Mekl_chernyi";
     private static final String ARSENIJ = "Arsenij1994";
+
+    @Autowired
+    private AnswerService answerService;
+
+    public String getRandomAnswer() {
+        return answerService.getRandomAnswer();
+    }
 
     public String answerForUser(String userName) {
         switch (userName) {
@@ -20,5 +30,16 @@ public class Resolver {
                 return "Дагестанские москвичи";
         }
         return "default";
+    }
+
+    public boolean isKitOrMitya(String userName) {
+        return !(userName.equals(PAWEL) || userName.equals(BARADAUKIN) || userName.equals(MEKL_CHERNYI) ||
+                userName.equals(ARSENIJ));
+    }
+
+
+
+    public void whoIsIt(User message) {
+        System.out.print(message);
     }
 }

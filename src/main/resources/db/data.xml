@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <preConditions>
+        <dbms type="postgresql"/>
+    </preConditions>
+
+    <changeSet author="pawel" id="20200428-01">
+        <sql>
+            CREATE TABLE IF NOT EXISTS answers (
+            id int NOT NULL primary key,
+            reply VARCHAR(200) NOT NULL
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet author="pawel" id="20200428-02">
+        <sql>
+            INSERT INTO answers(id, reply) VALUES
+            (1, 'Кхахахазза, не прячусь, ты дома уже больше месяца)работник ножа и топора,ей богу, как саня )))'),
+            (2, 'Ты уже от Сани видно заразился)'),
+            (3, 'Долбоёб )))'),
+            (4, 'Всё педики) я отрицательный) теперь вам пизда'),
+            (5, 'В очередной раз убеждаемся, что ты пустослов'),
+            (6, 'Откуда у теб такая информация ????'),
+            (7, 'Ты все знаешь, удивительно'),
+            (8, 'На зоне такие одинокие под шконкой ночуют'),
+            (9, 'Лучше быть одиноким волком, чем в стае овец'),
+            (10, 'Ооооо, хорош,у кита не осталось сокомандников'),
+            (11, 'Да и кит пидр, велик и приставку зажал'),
+            (12, 'А ты я смотрю знаток лекарств от мозолей,сразу понятно что твой чпекарь это лекарь'),
+            (13, 'не забудь правометицина попить'),
+            (14, 'Эксперт по шуткам также заслуживает хлопков'),
+            (15, 'провокация, я не поведусь'),
+            (16, 'Саша, ты молодец впервые'),
+            (17, 'Арсений, ты считаешь цифры приемлимые ?'),
+            (18, 'Я только достоверную инфу скидываю'),
+            (19, 'или ты уже к вечеру накирогазился?')
+            ;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
