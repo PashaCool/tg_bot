@@ -22,7 +22,7 @@ public class AnswerService {
         totalAnswers = answersMap.size();
     }
 
-    public String getRandomAnswer() {
+    public String getRandomTextAnswer() {
         return answersMap.get(getRandom());
     }
 
