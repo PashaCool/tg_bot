@@ -42,4 +42,21 @@
         </sql>
     </changeSet>
 
+    <changeSet author="pawel" id="20200429-01">
+        <comment>Добавлю колонку для хранения автора великих высказываний. Позже сделаю таблицу с авторами, а сюда id</comment>
+        <sql>
+            alter table answers add column jackass varchar(36);
+        </sql>
+    </changeSet>
+
+    <changeSet author="pawel" id="20200429-02">
+        <comment>Авторство</comment>
+        <sql>
+            update answers set jackass='arseniy' where id in(1, 2, 3, 4, 10, 11, 16, 18);
+            update answers set jackass='boulder' where id in(5, 6, 7, 9, 12, 14, 15, 17);
+            update answers set jackass='boroda' where id in(8, 13);
+            update answers set jackass='pawel' where id=19;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
