@@ -134,4 +134,19 @@
         </sql>
     </changeSet>
 
+    <changeSet author="pawel" id="20200501-07">
+        <comment>Foreign key answers from chpekari</comment>
+        <sql>
+            alter table botsm.answers alter column chpekar_id set data type int USING chpekar_id::integer;
+        </sql>
+    </changeSet>
+
+    <changeSet author="pawel" id="20200501-08">
+        <comment>Foreign key answers from chpekari</comment>
+        <sql>
+            alter table botsm.answers add constraint fk_chepakr_id foreign key (chpekar_id)
+            references botsm.chpekari (id);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
