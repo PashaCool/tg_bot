@@ -4,7 +4,7 @@ bot:
     botToken: 1114025234:AAHR0RRhLdNCHjAQd6BaA9Nl48LWkDM_pvc
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/kit_bot
+    url: jdbc:postgresql://host.docker.internal:5434/kit_bot
     driverclassName: org.postgresql.Driver
     username: postgres
     password: postgres
@@ -18,4 +18,4 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQL9Dialect
 
   liquibase:
-    change-log: classpath:db/data.xml
+    change-log: classpath:db/liquibase/master.xml

@@ -59,4 +59,79 @@
         </sql>
     </changeSet>
 
+    <changeSet author="pawel" id="20200501-01">
+        <comment>Схема для бд</comment>
+        <sql>create schema botsm;</sql>
+    </changeSet>
+
+    <changeSet author="pawel" id="20200501-02">
+        <comment>Схема для бд</comment>
+        <sql>alter table if exists answers set schema botsm</sql>
+    </changeSet>
+
+    <changeSet author="pawel" id="20200501-03">
+        <comment>Таблица авторов шедевров</comment>
+        <sql>
+            CREATE TABLE IF NOT EXISTS botsm.chpekari (
+            id serial NOT NULL primary key,
+            real_name varchar(36),
+            alias varchar(36),
+            tg_username varchar(36),
+            phone varchar(12)
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet author="pawel" id="20200501-03-1">
+        <comment>Таблица авторов шедевров</comment>
+        <sql>
+            alter table botsm.chpekari alter column phone set data type varchar(14);
+        </sql>
+    </changeSet>
+
+    <changeSet author="pawel" id="20200501-05">
+        <comment>Заполнение авторов шедевров</comment>
+        <sql>
+            insert into botsm.chpekari(real_name, alias, tg_username, phone) values
+            ('Павел', 'Russian', 'PawelI', '+375295195250'),
+            ('Женя', 'борода', 'baradaukin', '+375336773167'),
+            ('Кит', 'щебень', null, '+375292110215'),
+            ('Женя', 'Митя', null, '+375298974936'),
+            ('Армений', 'Лекарь', 'Arsenij1994', '+375333061292'),
+            ('Влад', 'Мекл', 'Mekl_chernyi', '+79779276086');
+        </sql>
+    </changeSet>
+
+    <changeSet author="pawel" id="20200501-04">
+        <sql>alter table botsm.answers rename column jackass to chpekar_id;</sql>
+    </changeSet>
+
+    <changeSet author="pawel" id="20200501-06">
+        <comment>Foreign key answers from chpekari</comment>
+        <sql>
+            update botsm.answers set chpekar_id=(select id from botsm.chpekari where real_name='Павел')
+            where chpekar_id='pawel';
+            update botsm.answers set chpekar_id=(select id from botsm.chpekari where alias='борода')
+            where chpekar_id='boroda';
+            update botsm.answers set chpekar_id=(select id from botsm.chpekari where real_name='Кит')
+            where chpekar_id='boulder';
+            update botsm.answers set chpekar_id=(select id from botsm.chpekari where real_name='Армений')
+            where chpekar_id='arseniy';
+        </sql>
+    </changeSet>
+
+    <changeSet author="pawel" id="20200501-06">
+        <comment>Foreign key answers from chpekari</comment>
+        <sql>
+            update botsm.answers set chpekar_id=(select id from botsm.chpekari where real_name='Павел')
+            where chpekar_id='pawel';
+            update botsm.answers set chpekar_id=(select id from botsm.chpekari where alias='борода')
+            where chpekar_id='boroda';
+            update botsm.answers set chpekar_id=(select id from botsm.chpekari where real_name='Кит')
+            where chpekar_id='boulder';
+            update botsm.answers set chpekar_id=(select id from botsm.chpekari where real_name='Армений')
+            where chpekar_id='arseniy';
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>
