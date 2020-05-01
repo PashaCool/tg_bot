@@ -1,0 +1,1 @@
+create database kit_bot;
