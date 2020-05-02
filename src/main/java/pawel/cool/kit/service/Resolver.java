@@ -11,17 +11,14 @@ import pawel.cool.kit.process.InputMessageType;
 import pawel.cool.kit.process.ProcessInputMessage;
 
 import java.io.File;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 @Component
 public class Resolver {
 
-    private static final String ORACLE_PAWEL_VOICE = "src/main/resources/static/audio/oraclePawel.ogg";
-    private File oraclePawelVoice;
     private final SendMessage message = new SendMessage();
     @Autowired
-    private AnswerService answerService;
+    private Constructor constructor;
     @Autowired
     private ProcessInputMessage processor;
 
@@ -37,9 +34,9 @@ public class Resolver {
             Long chatId = inputMessage.getChatId();
             switch (process) {
                 case ANOTHER:
-                    return constructAnswerMessage(chatId, answerService::getRandomTextAnswer);
+                    return constructAnswerMessage(chatId, constructor::getRandomTextAnswer);
                 case APPEAL_TO_PAWEL:
-                    return constructAudioMessage(chatId, this::getOraclePawelVoice);
+                    return constructAudioMessage(chatId, constructor::getOraclePawelVoice);
             }
         }
         return message;
@@ -50,13 +47,6 @@ public class Resolver {
         audioMessage.setChatId(chaId);
         audioMessage.setVoice(supplier.get());
         return audioMessage;
-    }
-
-    private File getOraclePawelVoice() {
-        if (oraclePawelVoice == null) {
-            this.oraclePawelVoice = new File(ORACLE_PAWEL_VOICE);
-        }
-        return oraclePawelVoice;
     }
 
     private SendMessage constructAnswerMessage(Long chatId, Supplier<String> supplier) {
