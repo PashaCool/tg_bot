@@ -11,11 +11,14 @@ import pawel.cool.kit.process.InputMessageType;
 import pawel.cool.kit.process.ProcessInputMessage;
 
 import java.io.File;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 @Component
 public class Resolver {
 
     private static final String ORACLE_PAWEL_VOICE = "src/main/resources/static/audio/oraclePawel.ogg";
+    private File oraclePawelVoice;
     private final SendMessage message = new SendMessage();
     @Autowired
     private AnswerService answerService;
@@ -34,28 +37,31 @@ public class Resolver {
             Long chatId = inputMessage.getChatId();
             switch (process) {
                 case ANOTHER:
-                    return constructAnswerMessage(chatId, getRandomTextAnswer());
+                    return constructAnswerMessage(chatId, answerService::getRandomTextAnswer);
                 case APPEAL_TO_PAWEL:
-                    return constructAudioMessage(chatId);
+                    return constructAudioMessage(chatId, this::getOraclePawelVoice);
             }
         }
         return message;
     }
 
-    private SendVoice constructAudioMessage(Long chaId) {
+    private SendVoice constructAudioMessage(Long chaId, Supplier<File> supplier) {
         SendVoice audioMessage = new SendVoice();
         audioMessage.setChatId(chaId);
-        audioMessage.setVoice(new File(ORACLE_PAWEL_VOICE));
+        audioMessage.setVoice(supplier.get());
         return audioMessage;
     }
 
-    private String getRandomTextAnswer() {
-        return answerService.getRandomTextAnswer();
+    private File getOraclePawelVoice() {
+        if (oraclePawelVoice == null) {
+            this.oraclePawelVoice = new File(ORACLE_PAWEL_VOICE);
+        }
+        return oraclePawelVoice;
     }
 
-    private SendMessage constructAnswerMessage(Long chatId, String answerText) {
+    private SendMessage constructAnswerMessage(Long chatId, Supplier<String> supplier) {
         message.setChatId(chatId);
-        message.setText(answerText);
+        message.setText(supplier.get());
         return message;
     }
 }
