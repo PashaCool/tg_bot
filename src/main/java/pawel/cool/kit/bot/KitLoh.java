@@ -6,10 +6,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.PartialBotApiMethod;
+import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendVoice;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import pawel.cool.kit.resolver.AuthorResolver;
+import pawel.cool.kit.service.Resolver;
 
 @Component
 @EnableConfigurationProperties
@@ -21,7 +25,7 @@ public class KitLoh extends TelegramLongPollingBot {
     @Value("${bot.kit.botToken}")
     private String botToken;
     @Autowired
-    private AuthorResolver resolver;
+    private Resolver resolver;
 
     @Override
     public String getBotToken() {
@@ -30,13 +34,17 @@ public class KitLoh extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        SendMessage randomAnswer = resolver.getAnswer(update);
+        PartialBotApiMethod<Message> randomAnswer = resolver.getAnswer(update);
         sendMessage(randomAnswer);
     }
 
-    private synchronized void sendMessage(SendMessage randomAnswer) {
+    private synchronized void sendMessage(PartialBotApiMethod<Message> randomAnswer) {
         try {
-            execute(randomAnswer);
+            if (randomAnswer instanceof SendMessage) {
+                execute((SendMessage) randomAnswer);
+            } else if (randomAnswer instanceof SendVoice) {
+                execute((SendVoice) randomAnswer);
+            }
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
